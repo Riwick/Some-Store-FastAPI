@@ -5,6 +5,7 @@ from sqlalchemy import pool
 
 from alembic import context
 
+from auth.models import metadata
 from products.models import metadata
 from database import metadata
 

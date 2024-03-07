@@ -2,6 +2,8 @@ import logging
 
 from fastapi import FastAPI, APIRouter, HTTPException
 
+from auth.base_config import fastapi_users, auth_backend
+from auth.schemas import UserRead, UserCreate
 from products.router import products_handler, products_router, products_formatter, categories_router
 
 main_handler = logging.FileHandler(filename='logs/main.log')
@@ -15,6 +17,31 @@ app = FastAPI()
 main_router = APIRouter()
 main_router.include_router(products_router)
 main_router.include_router(categories_router)
+
+main_router.include_router(
+    fastapi_users.get_auth_router(auth_backend),
+    prefix="/auth/jwt",
+    tags=["auth"],
+)
+
+main_router.include_router(
+    fastapi_users.get_register_router(UserRead, UserCreate),
+    prefix="/auth",
+    tags=["auth"],
+)
+
+main_router.include_router(
+    fastapi_users.get_verify_router(UserRead),
+    prefix="/auth",
+    tags=["auth"],
+)
+
+main_router.include_router(
+    fastapi_users.get_reset_password_router(),
+    prefix="/auth",
+    tags=["auth"],
+)
+
 
 app.include_router(main_router)
 
