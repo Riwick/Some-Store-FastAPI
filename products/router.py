@@ -1,6 +1,8 @@
 import logging
+import time
 
 from fastapi import APIRouter, Depends, HTTPException
+from fastapi_cache.decorator import cache
 from sqlalchemy import select, insert, delete, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -24,6 +26,7 @@ products_logger.addHandler(products_handler)
 
 
 @products_router.get('/')
+@cache(expire=3600, namespace='get_many_products')
 async def get_many_products(session: AsyncSession = Depends(get_async_session)):
     try:
         query = select(Product).limit(10)
@@ -50,7 +53,8 @@ async def get_many_products(session: AsyncSession = Depends(get_async_session)):
 
 
 @products_router.get('/{product_id}')
-async def get_product_id(product_id: int, session: AsyncSession = Depends(get_async_session), user=Depends(current_user)):
+@cache(expire=3600, namespace='get_product_id')
+async def get_product_id(product_id: int, session: AsyncSession = Depends(get_async_session)):
     try:
         query = select(Product).where(Product.id == product_id)
         result = await session.execute(query)
@@ -167,6 +171,7 @@ categories_router = APIRouter(
 
 
 @categories_router.get('/')
+@cache(expire=3600, namespace='get_categories')
 async def get_categories(session: AsyncSession = Depends(get_async_session)):
     try:
         query = select(Category).limit(10)

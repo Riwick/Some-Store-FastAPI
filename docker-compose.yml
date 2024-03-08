@@ -9,3 +9,43 @@ services:
       - POSTGRES_DB=postgres
     ports:
       - "10001:5432"
+
+#  redis:
+#    image: redis:7.2.4-alpine
+#    hostname: redis
+#    container_name: "redis"
+#
+#  worker:
+#    build:
+#      context: .
+#    hostname: worker
+#    container_name: "celery-worker"
+#    entrypoint: celery
+#    command: -A celery_app.app worker --loglevel=info
+#    volumes:
+#      - .
+#    links:
+#      - redis
+#    depends_on:
+#      - redis
+#    environment:
+#      - DB_HOST=database
+#      - DB_NAME=postgres
+#      - DB_USER=postgres
+#      - DB_PASS=postgres
+#
+#  flower:
+#    build:
+#      context: .
+#    hostname: flower
+#    entrypoint: celery
+#    command: -A celery_app.app flower
+#    volumes:
+#      - .
+#    links:
+#      - redis
+#    depends_on:
+#      - redis
+#      - worker
+#    ports:
+#      - "10002:5555"

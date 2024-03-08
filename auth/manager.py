@@ -1,14 +1,12 @@
-import uuid
 from typing import Optional
 
 from fastapi import Depends, Request
-from fastapi_users import BaseUserManager, UUIDIDMixin, schemas, models, exceptions, IntegerIDMixin
-from fastapi_users.jwt import generate_jwt
+from fastapi_users import BaseUserManager, schemas, models, exceptions, IntegerIDMixin
 
 from auth.logger import auth_logger
 from auth.models import User
 from auth.utils import get_user_db
-from auth.send_email import send_email
+from tasks.celery_app import send_email
 
 from config import SECRET
 
@@ -53,13 +51,13 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, int]):
             self, user: User, token: str, request: Optional[Request] = None
     ):
         auth_logger.info(f"Verification requested for user {user.id}")
-        send_email(user.email, token)
+        send_email.delay(user.email, token)
 
     async def on_after_forgot_password(
             self, user: User, token: str, request: Optional[Request] = None
     ):
         auth_logger.info(f"User {user.id} has forgot their password")
-        send_email(user.email, token)
+        send_email.delay(user.email, token)
 
 
 async def get_user_manager(user_db=Depends(get_user_db)):

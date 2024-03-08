@@ -1,8 +1,11 @@
-INFO:auth_logger-2024-03-07 22:41:27,322-Verification requested for user 1. Verification token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJ1c2VyQGV4YW1wbGUuY29tIiwiYXVkIjoiZmFzdGFwaS11c2Vyczp2ZXJpZnkiLCJleHAiOjE3MDk4MzY4ODd9.J1TJIuMIgLIabDnoqRUmXTcRfd1xsCb-7rqjwxWC8Bs
 INFO:auth_logger-2024-03-07 22:52:15,369-User 3 has registered.
 INFO:auth_logger-2024-03-07 22:52:52,634-Verification requested for user 3
 INFO:auth_logger-2024-03-07 22:59:49,743-Verification requested for user 3
 INFO:auth_logger-2024-03-07 23:02:20,565-Verification requested for user 3
 INFO:auth_logger-2024-03-07 23:02:26,107-Verification requested for user 3
 INFO:auth_logger-2024-03-07 23:07:09,192-Verification requested for user 3
-INFO:auth_logger-2024-03-07 23:15:02,699-User 3 has forgot their password. Reset token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzIiwicGFzc3dvcmRfZmdwdCI6IiQyYiQxMiQzN1VkcUhIdVhxZjNsNGRxL3dieVhPNGtVOEc5Q1NReFZ2Yzc4VWNaanAyWXlua21kWFhzQyIsImF1ZCI6ImZhc3RhcGktdXNlcnM6cmVzZXQiLCJleHAiOjE3MDk4Mzg5MDJ9.X9X4AxC5C34BXGhENCBb0q2L6Q4xz_FJUVRwVdNFO34
+INFO:auth_logger-2024-03-08 14:58:49,971-User 3 has forgot their password
+INFO:auth_logger-2024-03-08 15:00:46,063-User 3 has forgot their password
+INFO:auth_logger-2024-03-08 15:04:15,072-User 3 has forgot their password
+INFO:auth_logger-2024-03-08 15:05:10,155-User 3 has forgot their password
+INFO:auth_logger-2024-03-08 15:09:48,394-User 3 has forgot their password
