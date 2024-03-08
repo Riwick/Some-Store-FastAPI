@@ -1,13 +1,13 @@
-import logging
-import time
-
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi_cache.decorator import cache
+from fastapi_filter import FilterDepends
 from sqlalchemy import select, insert, delete, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from auth.base_config import current_user
 from database import get_async_session
+from products.filters import ProductFilter, CategoryFilter
+from products.logger import products_logger
 from products.models import Product, Category
 from products.categories_schemas import CategoryCreateUpdate
 from products.products_schemas import ProductCreateUpdate
@@ -17,32 +17,30 @@ products_router = APIRouter(
     tags=['products']
 )
 
-products_formatter = logging.Formatter('%(levelname)s:%(name)s-%(asctime)s-%(message)s')
-products_handler = logging.FileHandler('logs/products.log')
-products_handler.setFormatter(products_formatter)
-
-products_logger = logging.Logger(name='products_logger')
-products_logger.addHandler(products_handler)
+base_per_page = 10
 
 
 @products_router.get('/')
-@cache(expire=3600, namespace='get_many_products')
-async def get_many_products(session: AsyncSession = Depends(get_async_session)):
+# @cache(expire=60, namespace='get_many_products')
+async def get_many_products(per_page: int = base_per_page, page: int = 0, session: AsyncSession = Depends(get_async_session),
+                            product_filter: ProductFilter = FilterDepends(ProductFilter)):
+    if per_page > 30:
+        raise HTTPException(status_code=400, detail={
+            'status': 'error',
+            'data': None,
+            'details': 'Количество объектов на странице должно быть меньше 30'
+        })
     try:
-        query = select(Product).limit(10)
+        query = product_filter.filter(select(Product).limit(per_page).offset(page * per_page))
+        query = product_filter.sort(query)
         result = await session.execute(query)
-        if result:
-            return {
-                'status': 'success',
-                'data': result.mappings().all(),
-                'details': None
-            }
-        else:
-            return {
-                'status': 'not_found',
-                'data': None,
-                'details': 'Ни найдено ни одного предложения, проверьте параметры поиска'
-            }
+        return {
+            'status': 'success',
+            'data': result.mappings().all(),
+            'details': None,
+            'page': page,
+            'page_size': per_page,
+        }
     except Exception:
         products_logger.error(f'Some get_products error')
         raise HTTPException(status_code=500, detail={
@@ -58,19 +56,11 @@ async def get_product_id(product_id: int, session: AsyncSession = Depends(get_as
     try:
         query = select(Product).where(Product.id == product_id)
         result = await session.execute(query)
-        result2 = await session.execute(query)
-        if result2.mappings().all():
-            return {
-                'status': 'success',
-                'data': result.mappings().all(),
-                'details': None
-            }
-        else:
-            return {
-                'status': 'not_found',
-                'data': None,
-                'details': 'Продукт не найден'
-            }
+        return {
+            'status': 'success',
+            'data': result.mappings().all(),
+            'details': None
+        }
     except Exception:
         products_logger.error(f'Some get_products error')
         raise HTTPException(status_code=500, detail={
@@ -171,24 +161,26 @@ categories_router = APIRouter(
 
 
 @categories_router.get('/')
-@cache(expire=3600, namespace='get_categories')
-async def get_categories(session: AsyncSession = Depends(get_async_session)):
+# @cache(expire=3600, namespace='get_categories')
+async def get_categories(page_size: int = base_per_page, page: int = 0, session: AsyncSession = Depends(get_async_session),
+                         category_filter: CategoryFilter = FilterDepends(CategoryFilter)):
+    if page_size > 30:
+        raise HTTPException(status_code=400, detail={
+            'status': 'error',
+            'data': None,
+            'details': 'Количество объектов на странице должно быть меньше 30'
+        })
     try:
-        query = select(Category).limit(10)
+        query = select(Category).limit(page_size).offset(page * page_size)
+        query = category_filter.sort(query)
         result = await session.execute(query)
-        result2 = await session.execute(query)
-        if result2.mappings().all():
-            return {
-                'status': 'success',
-                'data': result.mappings().all(),
-                'details': None
-            }
-        else:
-            return {
-                'status': 'not_found',
-                'data': None,
-                'details': 'Не найдено ни одной категории, проверьте параметры поиска'
-            }
+        return {
+            'status': 'success',
+            'data': result.mappings().all(),
+            'details': None,
+            'page': page,
+            'page_size': page_size
+        }
     except Exception:
         products_logger.error(f'Some get_categories error')
         raise HTTPException(status_code=500, detail={

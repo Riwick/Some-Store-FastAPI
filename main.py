@@ -7,9 +7,11 @@ from fastapi_cache.backends.redis import RedisBackend
 
 from auth.base_config import fastapi_users, auth_backend
 from auth.schemas import UserRead, UserCreate
-from products.router import products_handler, products_router, products_formatter, categories_router
+from products.router import products_router, categories_router
+from products.logger import products_formatter, products_handler
 
 from redis import asyncio as aioredis
+
 
 main_handler = logging.FileHandler(filename='logs/main.log')
 main_handler.setFormatter(products_formatter)
@@ -26,7 +28,6 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(lifespan=lifespan, title='Some Store')
-add_pagination()
 
 main_router = APIRouter()
 main_router.include_router(products_router)
@@ -56,6 +57,12 @@ main_router.include_router(
     tags=["auth"],
 )
 
+main_router.include_router(
+    fastapi_users.get_users_router(UserRead, UserCreate),
+    prefix="/auth",
+    tags=["auth"],
+)
+
 
 app.include_router(main_router)
 
@@ -66,7 +73,7 @@ async def home_page():
         return {
             'status': 'success',
             'data': None,
-            'details': 'Самый лучший магазин в мире!!!'
+            'details': 'Добро пожаловать на сайт Some Store!'
         }
     except Exception:
         main_logger.error('Some home_page error')
@@ -75,6 +82,3 @@ async def home_page():
             'data': None,
             'details': 'Внутренняя ошибка сервера'
         })
-
-
-logging.basicConfig(handlers=(products_handler, main_handler), level=logging.ERROR)
