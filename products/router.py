@@ -9,8 +9,7 @@ from database import get_async_session
 from products.filters import ProductFilter, CategoryFilter
 from products.logger import products_logger
 from products.models import Product, Category
-from products.categories_schemas import CategoryCreateUpdate
-from products.products_schemas import ProductCreateUpdate
+from products.schemas import ProductCreateUpdate, CategoryCreateUpdate
 
 products_router = APIRouter(
     prefix='/products',

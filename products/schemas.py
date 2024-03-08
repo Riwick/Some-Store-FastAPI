@@ -11,3 +11,5 @@ class ProductCreateUpdate(BaseModel):
     quantity: int = Field(ge=0)
 
 
+class CategoryCreateUpdate(BaseModel):
+    title: str = Field(max_length=50)
