@@ -162,3 +162,10 @@ ERROR:products_logger-2024-03-08 20:56:11,956-Some get_categories error
 ERROR:products_logger-2024-03-08 20:56:26,306-Some get_categories error
 ERROR:products_logger-2024-03-08 20:56:28,806-Some get_categories error
 ERROR:products_logger-2024-03-08 20:56:31,442-Some get_categories error
+ERROR:products_logger-2024-03-09 13:05:33,893-Some delete_product error
+ERROR:products_logger-2024-03-09 13:07:47,113-Some delete_product error
+ERROR:products_logger-2024-03-09 13:07:48,424-Some delete_product error
+ERROR:products_logger-2024-03-09 13:08:04,740-Some delete_product error
+ERROR:products_logger-2024-03-09 13:08:16,340-Some delete_product error
+ERROR:products_logger-2024-03-09 13:08:42,125-Some delete_product error
+ERROR:products_logger-2024-03-09 13:09:58,492-Some delete_product error

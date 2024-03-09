@@ -57,8 +57,9 @@ main_router.include_router(
     tags=["auth"],
 )
 
+
 main_router.include_router(
-    fastapi_users.get_users_router(UserRead, UserCreate),
+    fastapi_users.get_users_router(user_schema=UserRead, user_update_schema=UserCreate, requires_verification=True),
     prefix="/auth",
     tags=["auth"],
 )
@@ -82,3 +83,4 @@ async def home_page():
             'data': None,
             'details': 'Внутренняя ошибка сервера'
         })
+

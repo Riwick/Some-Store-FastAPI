@@ -17,6 +17,8 @@ user = Table(
     Column('is_active', Boolean, default=False, nullable=False),
     Column('is_superuser', Boolean, default=False, nullable=False),
     Column('is_verified', Boolean, default=True, nullable=False),
+    Column('is_staff', Boolean, default=False, nullable=False),
+    Column('is_seller', Boolean, default=False, nullable=False),
 )
 
 
@@ -33,5 +35,11 @@ class User(SQLAlchemyBaseUserTable[int], Base):
         Boolean, default=False, nullable=False
     )
     is_verified: Mapped[bool] = mapped_column(
+        Boolean, default=False, nullable=False
+    )
+    is_staff: Mapped[bool] = mapped_column(
+        Boolean, default=False, nullable=False
+    )
+    is_seller: Mapped[bool] = mapped_column(
         Boolean, default=False, nullable=False
     )

@@ -21,3 +21,4 @@ class Product(Base):
     price = Column(Integer, nullable=False)
     quantity = Column(Integer, nullable=False)
     category_id = Column(ForeignKey('category.id'))
+    author_id = Column(ForeignKey('user.id'))
