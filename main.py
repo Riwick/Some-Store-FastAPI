@@ -7,8 +7,9 @@ from fastapi_cache.backends.redis import RedisBackend
 
 from auth.base_config import fastapi_users, auth_backend
 from auth.schemas import UserRead, UserCreate
+from config import REDIS_HOST, REDIS_PORT
 from products.router import products_router, categories_router
-from products.logger import products_formatter, products_handler
+from products.logger import products_formatter
 
 from redis import asyncio as aioredis
 
@@ -22,7 +23,7 @@ main_logger.addHandler(main_handler)
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    redis = aioredis.from_url('redis://localhost')
+    redis = aioredis.from_url(f'redis://{REDIS_HOST}:{REDIS_PORT}')
     FastAPICache.init(RedisBackend(redis), prefix='fastapi-cache')
     yield
 

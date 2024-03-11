@@ -169,3 +169,7 @@ ERROR:products_logger-2024-03-09 13:08:04,740-Some delete_product error
 ERROR:products_logger-2024-03-09 13:08:16,340-Some delete_product error
 ERROR:products_logger-2024-03-09 13:08:42,125-Some delete_product error
 ERROR:products_logger-2024-03-09 13:09:58,492-Some delete_product error
+ERROR:products_logger-2024-03-10 12:02:39,909-Some get_products error
+ERROR:products_logger-2024-03-10 12:04:22,443-Some get_categories error
+ERROR:products_logger-2024-03-11 10:42:44,934-Some get_products error
+ERROR:products_logger-2024-03-11 10:43:16,171-Some get_products error

@@ -3,9 +3,9 @@ from email.message import EmailMessage
 
 from celery import Celery
 
-from config import SMTP_USER, SMTP_PASS
+from config import SMTP_USER, SMTP_PASS, REDIS_PORT, REDIS_HOST
 
-celery = Celery('celery_app', broker='redis://localhost:6379')
+celery = Celery('celery_app', broker=f'redis://{REDIS_HOST}:{REDIS_PORT}')
 SMTP_HOST = "smtp.gmail.com"
 SMTP_PORT = 465
 

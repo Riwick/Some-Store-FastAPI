@@ -20,7 +20,7 @@ BASE_PAGE_SIZE = 10
 
 
 @products_router.get('/')
-# @cache(expire=60, namespace='get_many_products')
+@cache(expire=60, namespace='get_many_products')
 async def get_many_products(page_size: int = BASE_PAGE_SIZE, page: int = 0,
                             session: AsyncSession = Depends(get_async_session),
                             product_filter: ProductFilter = FilterDepends(ProductFilter)):
@@ -180,7 +180,7 @@ categories_router = APIRouter(
 
 
 @categories_router.get('/')
-# @cache(expire=3600, namespace='get_categories')
+@cache(expire=3600, namespace='get_categories')
 async def get_categories(page_size: int = BASE_PAGE_SIZE, page: int = 0,
                          session: AsyncSession = Depends(get_async_session),
                          category_filter: CategoryFilter = FilterDepends(CategoryFilter)):

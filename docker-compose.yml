@@ -1,51 +1,67 @@
-version: "3.0"
+version: "3.7"
+
 services:
   database:
-    container_name: "database"
-    image: postgres:16.1-alpine
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=postgres
+    image: postgres:16-alpine
+    container_name: database
+    command: -p 10001
+    expose:
+      - 10001
+    env_file:
+      - .env-non-dev
     ports:
-      - "10001:5432"
+      - "10004:10001"
 
-#  redis:
-#    image: redis:7.2.4-alpine
-#    hostname: redis
-#    container_name: "redis"
-#
-#  worker:
-#    build:
-#      context: .
-#    hostname: worker
-#    container_name: "celery-worker"
-#    entrypoint: celery
-#    command: -A celery_app.app worker --loglevel=info
-#    volumes:
-#      - .
-#    links:
-#      - redis
-#    depends_on:
-#      - redis
-#    environment:
-#      - DB_HOST=database
-#      - DB_NAME=postgres
-#      - DB_USER=postgres
-#      - DB_PASS=postgres
-#
-#  flower:
-#    build:
-#      context: .
-#    hostname: flower
-#    entrypoint: celery
-#    command: -A celery_app.app flower
-#    volumes:
-#      - .
-#    links:
-#      - redis
-#    depends_on:
-#      - redis
-#      - worker
-#    ports:
-#      - "10002:5555"
+  redis:
+    image: redis:7.2.4-alpine
+    container_name: redis
+    command: --port 10002
+    expose:
+      - 10002
+
+  app:
+    build:
+      context: .
+    env_file:
+      - .env-non-dev
+    container_name: fastapi_app
+    volumes:
+      - ./:/fastapi_app
+    command: ['docker/app.sh']
+    ports:
+      - "10000:8000"
+    depends_on:
+      - redis
+      - database
+
+  celery:
+    build:
+      context: .
+    env_file:
+      - .env-non-dev
+    container_name: celery
+    command: celery --app=tasks.celery_app:celery worker -l INFO
+    depends_on:
+      - redis
+
+  celery2:
+    build:
+      context: .
+    env_file:
+      - .env-non-dev
+    container_name: celery2
+    command: celery --app=tasks.celery_app:celery worker -l INFO
+    depends_on:
+      - redis
+
+  flower:
+    build:
+      context: .
+    env_file:
+      - .env-non-dev
+    container_name: flower
+    command: celery --app=tasks.celery_app:celery flower
+    depends_on:
+      - redis
+    ports:
+      - "10003:5555"

@@ -12,3 +12,6 @@ INFO:auth_logger-2024-03-08 15:09:48,394-User 3 has forgot their password
 INFO:auth_logger-2024-03-09 11:40:14,067-User 4 has registered.
 INFO:auth_logger-2024-03-09 11:40:52,531-User 5 has registered.
 INFO:auth_logger-2024-03-09 12:56:31,707-User 6 has registered.
+INFO:auth_logger-2024-03-11 10:47:33,960-User 1 has registered.
+INFO:auth_logger-2024-03-11 10:47:48,655-Verification requested for user 1
+INFO:auth_logger-2024-03-11 10:49:42,579-Verification requested for user 1
